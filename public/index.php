@@ -77,12 +77,19 @@ $app->get('/home', function (Request $request, Response $response) use ($twig) {
 
 // Ajouter un document (admin uniquement)
 $app->get('/ajouter', function (Request $request, Response $response) use ($twig) {
+    error_log("Session data: " . print_r($_SESSION, true)); // Debug session
+    if (!isset($_SESSION['user_email'])) {
+        return $response->withHeader('Location', '/')->withStatus(302);
+    }
+
     $role = $_SESSION['role'] ?? null;
     if ($role !== 'admin') {
         return $response->withHeader('Location', '/home')->withStatus(302);
     }
+
     return $twig->render($response, 'ajouter.twig');
 });
+
 
 // Modifier un document (admin uniquement)
 $app->get('/modifier', function (Request $request, Response $response) use ($twig) {
