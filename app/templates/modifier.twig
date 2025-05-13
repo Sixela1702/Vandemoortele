@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Modifier Documents - Maintenance Vandemoortele</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    {% if not session.user_email %}
+      <script>window.location.href = "/";</script>
+    {% endif %}
+
+    <header class="navbar">
+      <a href="https://vandemoortele.com/fr-fr" class="navbar-logo">
+        <img src="/Vandemoortele.png" alt="Logo" />
+      </a>
+      <div class="navbar-center">
+        <h1>Modifier les Documents</h1>
+      </div>
+      <div class="navbar-right">
+        <span>{{ session.user_email|split('@')[0] }}</span>
+        <a href="/logout">
+          <img src="/logout.png" alt="Déconnexion" title="Déconnexion" />
+        </a>
+        <a href="/home" style="color: white; text-decoration: underline">Retour</a>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="preview-container"></div>
+    </main>
+
+    <section class="edit-section" id="edit-section" style="display: none">
+      <div id="edit-form">
+        <h2>Modifier la carte</h2>
+        <input type="hidden" id="edit-id" />
+
+        <label for="edit-title">Titre :</label>
+        <input type="text" id="edit-title" />
+
+        <label for="edit-image">Image URL :</label>
+        <input type="text" id="edit-image" />
+
+        <label for="edit-link">Lien du document :</label>
+        <input type="text" id="edit-link" />
+
+        <button onclick="submitEdit()">Enregistrer</button>
+        <button onclick="cancelEdit()">Annuler</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>&copy; 2025 - Projet de maintenance Vandemoortele</p>
+    </footer>
+
+    <script src="/js/modifier.js"></script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ajouter un document</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    {% if not session.user_email %}
+      <script>window.location.href = "/";</script>
+    {% endif %}
+
+    <header class="navbar">
+      <div class="navbar-left">
+        <a href="/home" class="navbar-logo">
+          <img src="/Vandemoortele.png" alt="Logo" />
+        </a>
+      </div>
+      <div class="navbar-center">
+        <h1>Ajouter un document</h1>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <form class="form-container" id="add-form" enctype="multipart/form-data">
+        <label for="title">Titre :</label>
+        <input type="text" id="title" name="title" required />
+
+        <label for="link">Lien du document :</label>
+        <input type="url" id="link" name="link" required />
+
+        <label for="image-url">Lien de l'image :</label>
+        <input type="url" id="image-url" name="image-url" placeholder="https://..." />
+
+        <label for="image-file">Ou téléverser une image :</label>
+        <input type="file" id="image-file" name="image-file" accept="image/*" />
+
+        <button type="submit">Partager</button>
+      </form>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2025 - Ajout de document</p>
+    </footer>
+
+    <script src="/js/ajouter.js"></script>
+  </body>
+</html>

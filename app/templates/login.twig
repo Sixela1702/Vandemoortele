@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Connexion</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background-image 1s ease-in-out;
+    }
+
+    .login-container {
+      background-color: rgba(255, 200, 203, 0.6);
+      padding: 40px;
+      border-radius: 10px;
+      color: rgb(255, 0, 0);
+      text-align: center;
+      width: 320px;
+    }
+
+    .login-container h2 {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-bottom: 2px solid rgb(255, 7, 7);
+      background: transparent;
+      color: red;
+    }
+
+    input::placeholder {
+      color: rgba(245, 10, 10, 0.7);
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      font-size: 0.9em;
+      margin: 10px 0;
+    }
+
+    label input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #f1160f;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    a {
+      display: block;
+      margin-top: 10px;
+      color: #f13c0f;
+      text-decoration: none;
+      font-size: 0.9em;
+    }
+
+    .error {
+      color: darkred;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <form method="POST" action="/login">
+      <h2>Connexion</h2>
+
+      {% if error is defined %}
+        <div class="error">{{ error }}</div>
+      {% endif %}
+
+      <input type="text" name="email" placeholder="Enter your Username" required />
+      <input type="password" name="password" placeholder="Enter your Password" required />
+      <label><input type="checkbox" /> Remember me</label>
+      <button type="submit">Connexion</button>
+      <a href="https://youtu.be/Iwcwb0hAN64?si=jQaKzSsR6vm8KSD_">Mot de passe oublié?</a>
+      <a href="https://youtu.be/dQw4w9WgXcQ?si=xKwCnwPig8FnfRPL">Vous n'avez pas de compte ?</a>
+    </form>
+  </div>
+
+  <script>
+    const backgrounds = [
+      "/assets/images/background7.webp", "/assets/images/background11.jpg", "/assets/images/background8.webp",
+      "/assets/images/background9.webp", "/assets/images/background10.jpg", "/assets/images/background6.webp",
+      "/assets/images/background.avif", "/assets/images/background2.webp", "/assets/images/background3.jpg",
+      "/assets/images/background4.jpg", "/assets/images/background5.webp",
+    ];
+
+    let index = 0;
+
+    function changeBackground() {
+      document.body.style.backgroundImage = `url('${backgrounds[index]}')`;
+      index = (index + 1) % backgrounds.length;
+    }
+
+    changeBackground();
+    setInterval(changeBackground, 30000);
+  </script>
+</body>
+</html>

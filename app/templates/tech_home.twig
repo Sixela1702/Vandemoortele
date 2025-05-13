@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Accueil Tech - Maintenance Vandemoortele</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-left">
+      <a href="https://vandemoortele.com/fr-fr" class="navbar-logo">
+        <img src="/assets/images/Vandemoortele.png" alt="Logo" />
+      </a>
+    </div>
+    <div class="navbar-center">
+      <h1>Maintenance & Documents</h1>
+    </div>
+    <div class="navbar-right">
+      <span style="color: beige; margin-right: auto">{{ session.user_email|split('@')[0] }}</span>
+      <a href="/logout">
+        <img src="/assets/images/déconnexion.png" alt="Déconnexion" title="Déconnexion"
+             style="height: 40px; width: auto; margin: 20px; cursor: pointer" />
+      </a>
+      <a href="/recherche">
+        <img src="/assets/images/recherche.png" alt="recherche" />
+      </a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="preview-container" id="card-container"></div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 - Projet de prévisualisation de documents Excel</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("https://6809e4101f1a52874cde3ce7.mockapi.io/documents")
+        .then((res) => res.json())
+        .then((cards) => {
+          const container = document.getElementById("card-container");
+          if (!cards || cards.length === 0) {
+            container.innerHTML =
+              "<p style='text-align:center;'>Aucun document disponible pour le moment.</p>";
+            return;
+          }
+
+          cards.forEach(({ title, link, imageSrc }) => {
+            const card = document.createElement("a");
+            card.className = "preview-card";
+            card.href = link;
+            card.target = "_blank";
+
+            const img = document.createElement("img");
+            img.src = imageSrc;
+            img.alt = title;
+
+            const titleDiv = document.createElement("div");
+            titleDiv.className = "card-title";
+            titleDiv.textContent = title;
+
+            card.appendChild(img);
+            card.appendChild(titleDiv);
+            container.appendChild(card);
+          });
+        });
+    });
+  </script>
+</body>
+</html>

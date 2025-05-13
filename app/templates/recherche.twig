@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Recherche de documents</title>
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <style>
+      .logo {
+        height: 60px;
+        width: auto;
+      }
+
+      .search-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+
+      .result-card {
+        border: 1px solid #ddd;
+        margin: 1rem 0;
+        padding: 1rem;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .result-card img {
+        height: 80px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="navbar-left">
+        <a href="/home">
+          <img src="/assets/images/Vandemoortele.png" alt="Logo" class="logo" />
+        </a>
+      </div>
+      <div class="navbar-center">
+        <h1>Recherche de documents</h1>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="search-container">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Rechercher par titre ou lien..."
+          style="width: 100%; padding: 0.5rem"
+        />
+        <div id="results"></div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2025 - Recherche de documents</p>
+    </footer>
+
+    <script>
+      const searchInput = document.getElementById("searchInput");
+      const resultsDiv = document.getElementById("results");
+      const SHEET_URL = "https://6809e4101f1a52874cde3ce7.mockapi.io/documents";
+      let allCards = [];
+
+      fetch(SHEET_URL)
+        .then((res) => res.json())
+        .then((data) => {
+          allCards = data;
+        })
+        .catch((err) => {
+          console.error("Erreur lors du chargement des données :", err);
+          resultsDiv.innerHTML = "<p>Erreur lors du chargement des documents.</p>";
+        });
+
+      function displayResults(query) {
+        const results = allCards.filter(
+          (card) =>
+            card.title.toLowerCase().includes(query.toLowerCase()) ||
+            card.link.toLowerCase().includes(query.toLowerCase())
+        );
+
+        resultsDiv.innerHTML = "";
+
+        if (results.length === 0) {
+          resultsDiv.innerHTML = "<p>Aucun document trouvé.</p>";
+          return;
+        }
+
+        results.forEach(({ title, link, imageSrc }) => {
+          const card = document.createElement("div");
+          card.className = "result-card";
+
+          const img = document.createElement("img");
+          img.src = imageSrc;
+          img.alt = title;
+
+          const info = document.createElement("div");
+          info.innerHTML = `<strong>${title}</strong><br><a href="${link}" target="_blank">${link}</a>`;
+
+          card.appendChild(img);
+          card.appendChild(info);
+          resultsDiv.appendChild(card);
+        });
+      }
+
+      searchInput.addEventListener("input", (e) => {
+        displayResults(e.target.value);
+      });
+    </script>
+  </body>
+</html>

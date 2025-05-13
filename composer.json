@@ -1,0 +1,16 @@
+{
+    "name": "ba733/vandemoortele",
+    "description": "m",
+    "autoload": {
+        "psr-4": {
+            "Ba733\\Vandemoortele\\": "src/"
+        }
+    },
+    "require": {
+        "slim/psr7": "^1.7",
+        "slim/twig-view": "^3.4",
+        "twig/twig": "^3.21",
+        "symfony/dotenv": "^7.2",
+        "slim/slim": "^4.14"
+    }
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gestion des utilisateurs</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-left">
+      <a href="/home" class="navbar-logo">
+        <img src="/assets/images/Vandemoortele.png" alt="Logo" />
+      </a>
+    </div>
+    <div class="navbar-center">
+      <h1>Gérer les utilisateurs</h1>
+    </div>
+    <div class="navbar-right">
+      <a href="/logout">
+        <img src="/assets/images/déconnexion.png" alt="Déconnexion" />
+      </a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="form-container">
+      <h2>Ajouter un nouvel utilisateur</h2>
+      <form method="POST" action="/utilisateurs/ajouter">
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Mot de passe" required />
+        <select name="role" required>
+          <option value="tech">Technicien</option>
+          <option value="admin">Administrateur</option>
+        </select>
+        <button type="submit">Ajouter</button>
+      </form>
+    </div>
+
+    <div class="form-container">
+      <h2>Utilisateurs existants</h2>
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Changer rôle</th>
+            <th>Supprimer</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in utilisateurs %}
+          <tr>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <form method="POST" action="/utilisateurs/modifier-role">
+                <input type="hidden" name="email" value="{{ user.email }}">
+                <select name="role">
+                  <option value="tech" {% if user.role == 'tech' %}selected{% endif %}>Tech</option>
+                  <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                </select>
+                <button type="submit">Mettre à jour</button>
+              </form>
+            </td>
+            <td>
+              <form method="POST" action="/utilisateurs/supprimer" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                <input type="hidden" name="email" value="{{ user.email }}">
+                <button type="submit">🗑</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

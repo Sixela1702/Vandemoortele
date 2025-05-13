@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Supprimer un document</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+    }
+
+    .navbar {
+      background-color: #0077b6;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar-logo img {
+      height: 40px;
+    }
+
+    .navbar-center h1 {
+      margin: 0;
+      font-size: 1.5em;
+    }
+
+    .main-content {
+      padding: 20px;
+    }
+
+    .card {
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 20px auto;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .card img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .card-title {
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 1.1em;
+      color: #333;
+    }
+
+    .delete-btn {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: crimson;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+
+    .delete-btn:hover {
+      background-color: darkred;
+    }
+
+    .footer {
+      background-color: #0077b6;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-left">
+      <a href="/home" class="navbar-logo">
+        <img src="/assets/images/Vandemoortele.png" alt="Logo" />
+      </a>
+    </div>
+    <div class="navbar-center">
+      <h1>Supprimer un document</h1>
+    </div>
+    <div class="navbar-right">
+      <span style="color: beige;">{{ session.user_email|split('@')[0] }}</span>
+      <a href="/logout"><img src="/assets/images/déconnexion.png" alt="Déconnexion" title="Déconnexion" style="height: 30px; margin-left: 10px;" /></a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div id="cards-container"></div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 - Suppression de document</p>
+  </footer>
+
+  <script>
+    const SHEET_URL = "https://6809e4101f1a52874cde3ce7.mockapi.io/documents";
+    const container = document.getElementById("cards-container");
+
+    fetch(SHEET_URL)
+      .then((res) => res.json())
+      .then((cards) => {
+        if (cards.length === 0) {
+          container.innerHTML = "<p style='text-align:center;'>Aucun document enregistré.</p>";
+        } else {
+          cards.forEach(({ id, title, link, imageSrc }) => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            const img = document.createElement("img");
+            img.src = imageSrc;
+            img.alt = title;
+
+            const titleDiv = document.createElement("div");
+            titleDiv.className = "card-title";
+            titleDiv.textContent = title;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "delete-btn";
+            deleteBtn.textContent = "Supprimer";
+
+            deleteBtn.addEventListener("click", () => {
+              if (confirm(`Supprimer "${title}" ?`)) {
+                fetch(`${SHEET_URL}/${id}`, {
+                  method: "DELETE",
+                })
+                  .then((res) => {
+                    if (!res.ok) throw new Error("Erreur lors de la suppression.");
+                    alert("Document supprimé !");
+                    location.reload();
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                    alert("Erreur lors de la suppression.");
+                  });
+              }
+            });
+
+            card.appendChild(titleDiv);
+            card.appendChild(img);
+            card.appendChild(deleteBtn);
+            container.appendChild(card);
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Erreur de chargement :", err);
+        container.innerHTML = "<p style='text-align:center;'>Erreur de chargement des documents.</p>";
+      });
+  </script>
+</body>
+</html>
