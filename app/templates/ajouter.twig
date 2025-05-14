@@ -3,17 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <title>Ajouter un document</title>
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body>
-    {% if not session.user_email %}
-      <script>window.location.href = "/";</script>
-    {% endif %}
-
     <header class="navbar">
       <div class="navbar-left">
         <a href="/home" class="navbar-logo">
-          <img src="/Vandemoortele.png" alt="Logo" />
+          <img src="assets/images/Vandemoortele.png" alt="Logo" />
         </a>
       </div>
       <div class="navbar-center">

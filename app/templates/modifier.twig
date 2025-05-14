@@ -2,28 +2,201 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Modifier Documents - Maintenance Vandemoortele</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/style.css" />
+    <title>Modifier Documents - Maintenance Vandemoortele</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body {
+        background-color: #f9f9f9;
+        color: #333;
+        padding: 0 10px;
+      }
+
+      header.navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #0077b6;
+        color: white;
+        padding: 10px 20px;
+        flex-wrap: wrap;
+      }
+
+      .navbar-logo img {
+        height: 50px;
+      }
+
+      .navbar-center h1 {
+        font-size: 1.5rem;
+        margin: 10px;
+        text-align: center;
+      }
+
+      .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .navbar-right img {
+        height: 30px;
+        cursor: pointer;
+      }
+
+      main.main-content {
+        padding: 20px;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
+
+      .card-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        text-align: center;
+        transition: transform 0.2s;
+      }
+
+      .card-container:hover {
+        transform: scale(1.02);
+      }
+
+      .preview-card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .preview-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+      }
+
+      .card-title {
+        padding: 10px;
+        font-weight: bold;
+      }
+
+      .card-container button {
+        background-color: #0077b6;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      .card-container button:hover {
+        background-color: #0077b6;
+      }
+
+      .edit-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 10px;
+      }
+
+      #edit-form {
+        max-width: 600px;
+        width: 100%;
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      #edit-form h2 {
+        margin-bottom: 15px;
+      }
+
+      #edit-form label {
+        font-weight: bold;
+      }
+
+      #edit-form input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      #edit-form button {
+        padding: 10px 20px;
+        margin-right: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #28a745;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      #edit-form button:hover {
+        background-color: #218838;
+      }
+
+      #edit-form button:nth-child(2) {
+        background-color: #dc3545;
+      }
+
+      #edit-form button:nth-child(2):hover {
+        background-color: #c82333;
+      }
+
+      footer.footer {
+        text-align: center;
+        padding: 15px;
+        background-color: #f1f1f1;
+        margin-top: 40px;
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      @media (max-width: 600px) {
+        .navbar-center h1 {
+          font-size: 1.2rem;
+        }
+
+        .navbar-right {
+          flex-direction: column;
+        }
+
+        main.main-content {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
   <body>
-    {% if not session.user_email %}
-      <script>window.location.href = "/";</script>
-    {% endif %}
-
     <header class="navbar">
       <a href="https://vandemoortele.com/fr-fr" class="navbar-logo">
-        <img src="/Vandemoortele.png" alt="Logo" />
+        <img src="assets/images/Vandemoortele.png" alt="Logo" />
       </a>
       <div class="navbar-center">
         <h1>Modifier les Documents</h1>
       </div>
       <div class="navbar-right">
-        <span>{{ session.user_email|split('@')[0] }}</span>
-        <a href="/logout">
-          <img src="/logout.png" alt="Déconnexion" title="Déconnexion" />
+        <span id="user-name"></span>
+        <a href="#" id="logout-btn">
+          <img src="assets/images/logout.png" alt="Déconnexion" title="Déconnexion" />
         </a>
-        <a href="/home" style="color: white; text-decoration: underline">Retour</a>
+        <a href="index.html" style="color: white; text-decoration: underline"
+          >Retour</a
+        >
       </div>
     </header>
 
@@ -54,6 +227,6 @@
       <p>&copy; 2025 - Projet de maintenance Vandemoortele</p>
     </footer>
 
-    <script src="/js/modifier.js"></script>
+    <script src="assets/js/modifier.js"></script>
   </body>
 </html>

@@ -1,5 +1,8 @@
 <?php
 // public/index.php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -7,9 +10,11 @@ use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../app/config/database.php';
@@ -77,41 +82,45 @@ $app->get('/home', function (Request $request, Response $response) use ($twig) {
 
 // Ajouter un document (admin uniquement)
 $app->get('/ajouter', function (Request $request, Response $response) use ($twig) {
-    error_log("Session data: " . print_r($_SESSION, true)); // Debug session
+    // Vérifie que l'utilisateur est connecté
     if (!isset($_SESSION['user_email'])) {
+        error_log("Accès non autorisé à /ajouter : utilisateur non connecté.");
         return $response->withHeader('Location', '/')->withStatus(302);
     }
 
+    // Vérifie que l'utilisateur est admin
     $role = $_SESSION['role'] ?? null;
     if ($role !== 'admin') {
+        error_log("Accès refusé à /ajouter pour l'utilisateur {$_SESSION['user_email']} avec rôle: $role");
         return $response->withHeader('Location', '/home')->withStatus(302);
     }
 
+    // Tout est bon : afficher la page
     return $twig->render($response, 'ajouter.twig');
 });
 
 
 // Modifier un document (admin uniquement)
 $app->get('/modifier', function (Request $request, Response $response) use ($twig) {
-    $role = $_SESSION['role'] ?? null;
-    if ($role !== 'admin') {
+    if (!isset($_SESSION['user_email']) || ($_SESSION['role'] ?? '') !== 'admin') {
         return $response->withHeader('Location', '/home')->withStatus(302);
     }
+
     return $twig->render($response, 'modifier.twig');
 });
 
 // Supprimer un document (admin uniquement)
 $app->get('/supprimer', function (Request $request, Response $response) use ($twig) {
-    $role = $_SESSION['role'] ?? null;
-    if ($role !== 'admin') {
+    if (!isset($_SESSION['user_email']) || ($_SESSION['role'] ?? '') !== 'admin') {
         return $response->withHeader('Location', '/home')->withStatus(302);
     }
+
     return $twig->render($response, 'supprimer.twig');
 });
 
 // Page de gestion utilisateurs (admin seulement)
 $app->get('/utilisateurs', function (Request $request, Response $response) use ($twig, $pdo) {
-    if ($_SESSION['role'] !== 'admin') {
+    if (!isset($_SESSION['user_email']) || ($_SESSION['role'] ?? '') !== 'admin') {
         return $response->withHeader('Location', '/home')->withStatus(302);
     }
 
