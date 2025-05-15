@@ -5,20 +5,43 @@ const techlinkInput = document.getElementById("techlink");
 const imageUrlInput = document.getElementById("image-url");
 const imageFileInput = document.getElementById("image-file");
 
+// Génération automatique du techlink à partir du lien Google Sheets
+linkInput.addEventListener("input", function () {
+  const linkValue = linkInput.value;
+  const regex =
+    /https:\/\/docs\.google\.com\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/;
+
+  const match = linkValue.match(regex);
+  if (match) {
+    const docId = match[1];
+    const previewLink = `https://docs.google.com/spreadsheets/d/${docId}/preview`;
+    techlinkInput.value = previewLink;
+  } else {
+    techlinkInput.value = ""; // Réinitialise si le lien n'est pas valide
+  }
+});
+
 form.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const title = titleInput.value;
-  const link = linkInput.value;
-  const techlink = techlinkInput.value;
-  const imageUrl = imageUrlInput.value;
+  const title = titleInput.value.trim();
+  const link = linkInput.value.trim();
+  const techlink = techlinkInput.value.trim();
+  const imageUrl = imageUrlInput.value.trim();
   const imageFile = imageFileInput.files[0];
+
+  // Validation des champs
+  if (!title || !link) {
+    alert("Les champs titre et lien sont obligatoires.");
+    return;
+  }
 
   if (!techlink) {
     alert("Le lien technique est obligatoire.");
     return;
   }
 
+  // Gestion de l'image (URL ou fichier)
   if (imageUrl) {
     saveCard(title, link, techlink, imageUrl);
   } else if (imageFile) {
@@ -28,10 +51,8 @@ form.addEventListener("submit", function (e) {
     };
     reader.readAsDataURL(imageFile);
   } else {
-    alert("Veuillez fournir une image.");
+    alert("Veuillez fournir une image (URL ou fichier).");
   }
-
-  form.reset();
 });
 
 function saveCard(title, link, techlink, imageSrc) {
@@ -52,6 +73,7 @@ function saveCard(title, link, techlink, imageSrc) {
     })
     .then(() => {
       alert("Document ajouté dans la base !");
+      form.reset(); // Réinitialiser le formulaire après succès
     })
     .catch((error) => {
       console.error("Erreur :", error);
