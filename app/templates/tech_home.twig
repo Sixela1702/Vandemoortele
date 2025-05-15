@@ -47,10 +47,10 @@
             return;
           }
 
-          cards.forEach(({ title, link, imageSrc }) => {
+          cards.forEach(({ title, link, imageSrc, techlink }) => {
             const card = document.createElement("a");
             card.className = "preview-card";
-            card.href = link;
+            card.href = techlink;
             card.target = "_blank";
 
             const img = document.createElement("img");
