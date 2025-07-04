@@ -3,7 +3,7 @@
 
 $host = '127.0.0.1';
 $port = '3308';
-$db   = 'gestion_maintenance';
+$db   = 'conseil_maintenance';
 $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';
@@ -18,7 +18,7 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 
-    $email = 'admin@v.com';
+    $email = 'test@vandemoortele.com';
     $plainPassword = 'admin123';
     $hashedPassword = password_hash($plainPassword, PASSWORD_DEFAULT);
     $role = 'admin';
